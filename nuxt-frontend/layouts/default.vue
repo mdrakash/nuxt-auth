@@ -1,0 +1,31 @@
+<template>
+  <div>
+    <div class="container">
+      <nav class="navbar navbar-expand-lg bg-body-tertiary">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="#">Nuxt 3</a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+              <li class="nav-item">
+                <NuxtLink class="nav-link" activeClass="active" to="/">Index</NuxtLink>
+              </li>
+              <li class="nav-item">
+                <NuxtLink class="nav-link" activeClass="active" to="/login">Login</NuxtLink>
+              </li>
+              <li class="nav-item">
+                <NuxtLink class="nav-link" activeClass="active" to="/register">Registration</NuxtLink>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+      <main>
+        <slot/>
+      </main>
+    </div>
+  </div>
+</template>
