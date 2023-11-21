@@ -5,21 +5,24 @@
 </template>
 
 <script>
+
 export default {
+    setup() {
+        definePageMeta({
+            middleware: ['auth'],
+        });
+        useHead({
+            title:'home',
+        });
+    },
     data() {
         return {
             user:null,
         }
     },
-    async mounted() {
-        await useApiFetch('/sanctum/csrf-cookie');
-        const {data} = await useApiFetch('/api/user',{
-            method:'get',
-            headers:{
-                'Accept':'application/json',
-            },            
-        })
-        this.user = data.value;
+    mounted() {
+        const auth = useAuthStore();
+        this.user = auth.user;
     },
 }
 </script>

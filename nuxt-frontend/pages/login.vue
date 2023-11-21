@@ -55,8 +55,8 @@ export default {
     data() {
         return {
             form:{
-                email:null,
-                password:null,
+                email:'vrice@example.org',
+                password:'password',
             },
         }
     },
@@ -64,7 +64,7 @@ export default {
         async handleSubmit(){
             const auth = useAuthStore();
             const {error} = await auth.login(this.form);
-            console.log(error);
+            if(!error.value) navigateTo('/');
         }
     },
 }

@@ -71,18 +71,9 @@ export default {
     },
     methods: {
         async handleSubmit(){
-            await useApiFetch('/sanctum/csrf-cookie');
-            await useFetch('/register',{
-                method:'post',
-                body:this.form,
-                onResponse({ request, response, options }) {
-                    if(response.ok){
-                        navigateTo('/');
-                    }else{
-                        console.log('error');
-                    }
-                },
-            })
+            const auth = useAuthStore();
+            const {error} = await auth.register(this.form);
+            if(!error) navigateTo('/');
         }
     },
 }
