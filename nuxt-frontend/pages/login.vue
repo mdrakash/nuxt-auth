@@ -15,14 +15,22 @@
                         </div>
                         <div class="card-body">
                             <div class="p-3">
-                                <form class="mt-4">
+                                <form class="mt-4 needs-validation" novalidate>
                                     <div class="mb-3">
                                         <label class="form-label" for="email">Email</label>
-                                        <input type="email" v-model="form.email" class="form-control" id="email" placeholder="Enter email">
+                                        <input type="email" v-model="form.email" class="form-control" 
+                                            :class="{'is-invalid':errors?.email}" id="email" placeholder="Enter email">
+                                        <div v-if="errors?.email" class="invalid-feedback">
+                                            {{errors.email[0]}}
+                                        </div>
                                     </div>
                                     <div class="mb-3">
                                         <label class="form-label" for="userpassword">Password</label>
-                                        <input type="password" v-model="form.password" class="form-control" id="userpassword" placeholder="Enter password">
+                                        <input type="password" v-model="form.password" class="form-control" 
+                                            :class="{'is-invalid':errors?.password}" id="userpassword" placeholder="Enter password">
+                                        <div v-if="errors?.password" class="invalid-feedback">
+                                           {{errors.password[0]}}
+                                        </div>
                                     </div>
                                     <div class="mb-3 row">
                                         <div class="col-sm-6">
@@ -58,13 +66,21 @@ export default {
                 email:'vrice@example.org',
                 password:'password',
             },
+            errors:null,
         }
     },
     methods: {
         async handleSubmit(){
             const auth = useAuthStore();
-            const {error} = await auth.login(this.form);
-            if(!error.value) navigateTo('/');
+            try {
+                await auth.login(this.form);
+                if (auth.isLoggedIn) {
+                    navigateTo('/');
+                    
+                }
+            } catch (error) {
+                this.errors = error.data.errors;
+            }
         }
     },
 }

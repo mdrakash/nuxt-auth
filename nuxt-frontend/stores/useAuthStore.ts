@@ -16,27 +16,32 @@ type RegistrationData = {
 }
 export const useAuthStore = defineStore('auth', () => {
     const user = ref<User | null> (null);
-    const isLoggedIn = computed(() => !!user.value);
-
+    let isLoggedIn = ref(false);
     async function fetchUser() {
-        const {data} = await useApiFetch('/api/user');
-        user.value = data.value as User;
+        const data = await $fetch('http://127.0.0.1:8000/api/user',{
+            headers:{
+                'Accept':'application/json',
+            }
+        });
+        user.value = data as User;
     }
     async function logout() {
-         await useApiFetch('/logout',{method:'POST'});
-         user.value = null;
-         navigateTo('/login');
+        await useApiFetch('/logout',{method:'POST'});
+        user.value = null;
+        navigateTo('/login');
     }
     async function login(credentials : Credential){
-        await useApiFetch('/sanctum/csrf-cookie');
-        const login = await useApiFetch('/login',{
-            method:'post',
-            body:credentials
-        });
-        
-        await fetchUser();
-
-        return login;
+        try {
+            const login = await $fetch('http://127.0.0.1:8000/api/login',{
+                method:'post',
+                body:credentials
+            });
+            isLoggedIn.value = true;
+            // await fetchUser();
+            return login;
+        } catch (error) {
+            throw error;
+        }
     }
     async function register(data : RegistrationData){
         await useApiFetch('/sanctum/csrf-cookie');
